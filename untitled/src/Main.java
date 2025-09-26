@@ -1,9 +1,6 @@
 import java.util.Scanner;
-
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -14,19 +11,15 @@ public class Main {
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_YELLOW = "\u001B[33m";
     public static final String[] COLORS = {ANSI_RESET, ANSI_YELLOW, ANSI_GREEN};
-    static final String p1 = "/Users/acz/IdeaProjects/apcs_wordle/nonwordles.json";
-    static final String p2 = "/Users/acz/IdeaProjects/apcs_wordle/wordles.json";
+    static final String p1 = "nonwordles.json";
+    static final String p2 = "wordles.json";
     static final List<String> nonworldes = jsonToList(p1);
     static final List<String> worldes = jsonToList(p2);
     public static void main(String[] args) {
-
-
         Scanner input = new Scanner(System.in);
-
-
+        assert worldes != null;
         String target = worldes.get((int) (Math.random() * worldes.size())).toUpperCase();
         System.out.println(target);
-
         int guess_count = 6;
         boolean win_flag = false;
         while (guess_count > 0) {
@@ -74,21 +67,18 @@ public class Main {
                 return false;
             }
         }
+        assert nonworldes != null;
+        assert worldes != null;
         return (nonworldes.contains(inp.toLowerCase()) || worldes.contains(inp.toLowerCase()));
     }
 
 
     private static List<String> jsonToList(String json) {
-
         Gson gson = new Gson();
         Type listType = new TypeToken<List<String>>(){}.getType();
-
         try (FileReader reader = new FileReader(json)) {
-            List<String> ls = gson.fromJson(reader, listType);
-            return ls;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            return gson.fromJson(reader, listType);
+        } catch (IOException _) {}
         return null;
     }
 }
