@@ -1,19 +1,41 @@
 import java.util.Scanner;
+
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.List;
+
 public class Main {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_YELLOW = "\u001B[33m";
     public static final String[] COLORS = {ANSI_RESET, ANSI_YELLOW, ANSI_GREEN};
-
+    static final String p1 = "/Users/acz/IdeaProjects/apcs_wordle/nonwordles.json";
+    static final String p2 = "/Users/acz/IdeaProjects/apcs_wordle/wordles.json";
+    static final List<String> nonworldes = jsonToList(p1);
+    static final List<String> worldes = jsonToList(p2);
     public static void main(String[] args) {
+
+
         Scanner input = new Scanner(System.in);
-        String target = "BALLS"; // TODO: make this randomly choose a target word
+
+
+        String target = worldes.get((int) (Math.random() * worldes.size())).toUpperCase();
+        System.out.println(target);
+
         int guess_count = 6;
         boolean win_flag = false;
         while (guess_count > 0) {
             System.out.println("Input: ");
             String inp = input.nextLine().toUpperCase();
-            if (!is_valid(inp)) continue;
+            if (!is_valid(inp)) {
+                System.out.println("invalid!");
+                continue;
+            }
             int[] alpha = new int[26];
             int[] out = new int[5];
             for (int i = 0; i < 5; i++) alpha[target.charAt(i) - 'A']++;
@@ -41,10 +63,10 @@ public class Main {
             guess_count--;
         }
         if (win_flag) System.out.println("WINIOOFIJWIOFJDOHFOISDHOIFHSDIFHSDIOF");
-        else System.out.println("YOU SUCK!!!!!!!!!");
+        else System.out.println("YOU SUCK!!!!!!!!! [the word was " + target + "]");
     }
 
-    // checks for fully alpha & length 5; TODO: make this check against the dictionary
+    // checks for fully alpha & length 5;
     private static boolean is_valid(String inp) {
         if (inp.length() != 5) return false;
         for (int i = 0; i < 5; i++) {
@@ -52,6 +74,21 @@ public class Main {
                 return false;
             }
         }
-        return true;
+        return (nonworldes.contains(inp.toLowerCase()) || worldes.contains(inp.toLowerCase()));
+    }
+
+
+    private static List<String> jsonToList(String json) {
+
+        Gson gson = new Gson();
+        Type listType = new TypeToken<List<String>>(){}.getType();
+
+        try (FileReader reader = new FileReader(json)) {
+            List<String> ls = gson.fromJson(reader, listType);
+            return ls;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
