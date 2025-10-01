@@ -13,6 +13,7 @@ public class Main {
     public static final String[] COLORS = {ANSI_RESET, ANSI_YELLOW, ANSI_GREEN};
     static final List<String> nonworldes = jsonToList("nonwordles.json");
     static final List<String> worldes = jsonToList("wordles.json");
+
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         assert worldes != null;
@@ -20,6 +21,7 @@ public class Main {
 //        System.out.println(target);
         int guess_count = 6;
         boolean win_flag = false;
+        List<String> prev_answers = new java.util.ArrayList<>(List.of());
         while (guess_count > 0) {
             System.out.println("Input: ");
             String inp = input.nextLine().toUpperCase();
@@ -49,8 +51,12 @@ public class Main {
                     alpha[inp.charAt(i) - 'A']--;
                 }
             }
-            for (int i = 0; i < 5; i++) System.out.print(COLORS[out[i]] + out[i]);
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < 5; i++) sb.append(COLORS[out[i]]).append(inp.charAt(i));
+            for (String s : prev_answers) System.out.println(s);
+            System.out.print(sb);
             System.out.println(ANSI_RESET);
+            prev_answers.add(sb.toString());
             guess_count--;
         }
         if (win_flag) System.out.println("WINIOOFIJWIOFJDOHFOISDHOIFHSDIFHSDIOF");
@@ -69,6 +75,10 @@ public class Main {
         assert worldes != null;
         return (nonworldes.contains(inp.toLowerCase()) || worldes.contains(inp.toLowerCase()));
     }
+//    static void ClearConsole()
+//    {
+//        System.out.print("\033[H\033[2J");
+//    }
 
 
     private static List<String> jsonToList(String json) {
