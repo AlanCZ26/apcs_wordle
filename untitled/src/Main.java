@@ -11,15 +11,13 @@ public class Main {
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_YELLOW = "\u001B[33m";
     public static final String[] COLORS = {ANSI_RESET, ANSI_YELLOW, ANSI_GREEN};
-    static final String p1 = "nonwordles.json";
-    static final String p2 = "wordles.json";
-    static final List<String> nonworldes = jsonToList(p1);
-    static final List<String> worldes = jsonToList(p2);
+    static final List<String> nonworldes = jsonToList("nonwordles.json");
+    static final List<String> worldes = jsonToList("wordles.json");
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         assert worldes != null;
         String target = worldes.get((int) (Math.random() * worldes.size())).toUpperCase();
-        System.out.println(target);
+//        System.out.println(target);
         int guess_count = 6;
         boolean win_flag = false;
         while (guess_count > 0) {
